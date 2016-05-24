@@ -28,6 +28,7 @@
 #include <fstream>
 #include <iostream>
 #include <cstdlib>
+#include <string.h>
 #ifdef HPCG_DETAILED_DEBUG
 using std::cin;
 #endif
@@ -72,11 +73,24 @@ using std::endl;
 */
 int main(int argc, char * argv[]) {
 
-#ifndef HPCG_NO_MPI
-  MPI_Init(&argc, &argv);
-#endif
-
   HPCG_Params params;
+  int provided = MPI_THREAD_SINGLE,
+      requested;
+#ifndef HPCG_NO_MPI
+  if( argc > 1 && 0 == strncmp(argv[1], "-threads", 8) ) {
+    requested = MPI_THREAD_MULTIPLE;
+    argc--; argv++;
+  }
+  else {
+    requested = MPI_THREAD_FUNNELED;
+  }
+  MPI_Init_thread(&argc, &argv, requested, &provided);
+  if( requested > provided ) {
+    HPCG_fout << "Can't init MPI with thread level " <<requested <<", got" <<provided <<"."<<endl;
+    return -1;
+  }
+  params.rtSafe = (provided >= MPI_THREAD_MULTIPLE);
+#endif
 
   HPCG_Init(&argc, &argv, params);
 
@@ -119,7 +133,7 @@ int main(int argc, char * argv[]) {
 
   // Construct the geometry and linear system
   Geometry * geom = new Geometry;
-  GenerateGeometry(size, rank, params.numThreads, nx, ny, nz, geom);
+  GenerateGeometry(size, rank, params.rtSafe, params.numThreads, nx, ny, nz, geom);
 
   ierr = CheckAspectRatio(0.125, geom->npx, geom->npy, geom->npz, "process grid", rank==0);
   if (ierr)

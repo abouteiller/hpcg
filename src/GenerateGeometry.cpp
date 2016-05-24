@@ -45,7 +45,7 @@ using std::endl;
   @param[in]  nx, ny, nz number of grid points for each local block in the x, y, and z dimensions, respectively
   @param[out] geom data structure that will store the above parameters and the factoring of total number of processes into three dimensions
 */
-void GenerateGeometry(int size, int rank, int numThreads, int nx, int ny, int nz, Geometry * geom) {
+void GenerateGeometry(int size, int rank, int rtSafe, int numThreads, int nx, int ny, int nz, Geometry * geom) {
 
   int npx, npy, npz;
 
@@ -75,6 +75,7 @@ void GenerateGeometry(int size, int rank, int numThreads, int nx, int ny, int nz
 #endif
   geom->size = size;
   geom->rank = rank;
+  geom->rtSafe = rtSafe;
   geom->numThreads = numThreads;
   geom->nx = nx;
   geom->ny = ny;

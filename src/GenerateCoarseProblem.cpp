@@ -83,7 +83,7 @@ void GenerateCoarseProblem(const SparseMatrix & Af) {
 
   // Construct the geometry and linear system
   Geometry * geomc = new Geometry;
-  GenerateGeometry(Af.geom->size, Af.geom->rank, Af.geom->numThreads, nxc, nyc, nzc, geomc);
+  GenerateGeometry(Af.geom->size, Af.geom->rank, Af.geom->rtSafe, Af.geom->numThreads, nxc, nyc, nzc, geomc);
 
   SparseMatrix * Ac = new SparseMatrix;
   InitializeSparseMatrix(*Ac, geomc);

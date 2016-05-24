@@ -47,6 +47,7 @@ typedef long long global_int_t;
 struct Geometry_STRUCT {
   int size; //!< Number of MPI processes
   int rank; //!< This process' rank in the range [0 to size - 1]
+  int rtSafe; //!< is the runtime in thread-safe mode
   int numThreads; //!< This process' number of threads
   int nx;   //!< Number of x-direction grid points for each local subdomain
   int ny;   //!< Number of y-direction grid points for each local subdomain

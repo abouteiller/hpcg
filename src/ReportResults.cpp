@@ -214,6 +214,7 @@ void ReportResults(const SparseMatrix & A, int numberOfMgLevels, int numberOfCgS
     doc.add("Machine Summary","");
     doc.get("Machine Summary")->add("Distributed Processes",A.geom->size);
     doc.get("Machine Summary")->add("Threads per processes",A.geom->numThreads);
+    doc.get("Machine Summary")->add("Thread-safe RT",A.geom->rtSafe);
 
     doc.add("Global Problem Dimensions","");
     doc.get("Global Problem Dimensions")->add("Global nx",A.geom->npx*A.geom->nx);
